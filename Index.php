@@ -1,59 +1,44 @@
 <?php
-require_once 'credentials.php';
-
-try {
-    $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ];
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-} catch (PDOException $e) {
-    die('Erreur de connexion : ' . $e->getMessage());
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit;
 }
+require('credentials.php');
 
-$stmt = $pdo->query('SELECT * FROM ma_table');
-$rows = $stmt->fetchAll();
+$connexion = new PDO("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $password);
+
+$requete = $connexion->prepare('SELECT * FROM materiel');
+$requete->execute();
+$materiels = $requete->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Affichage des données</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
-        h1 { color: #333; }
-        table { border-collapse: collapse; width: 100%; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
-        th { background-color: #4a90d9; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        tr:hover { background-color: #dce9f7; }
-    </style>
+    <meta charset="utf-8">
+    <title>Gestion du matériel</title>
 </head>
 <body>
-<h1>Liste des enregistrements</h1>
+    <h1>Gestion du matériel</h1>
+    <p>Connecté en tant que : <?php print($_SESSION['user']) ?> | <a href="logout.php">Se déconnecter</a></p>
 
-<?php if (empty($rows)): ?>
-    <p>Aucun enregistrement trouvé.</p>
-<?php else: ?>
-    <table>
-        <thead>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Année</th>
+            <th>Détails</th>
+            <th>Type</th>
+        </tr>
+        <?php foreach ($materiels as $materiel): ?>
             <tr>
-                <?php foreach (array_keys($rows[0]) as $colonne): ?>
-                    <th><?= htmlspecialchars($colonne) ?></th>
-                <?php endforeach; ?>
+                <td><?php print($materiel['id']) ?></td>
+                <td><?php print($materiel['nom']) ?></td>
+                <td><?php print($materiel['annee']) ?></td>
+                <td><?php print($materiel['details']) ?></td>
+                <td><?php print($materiel['type']) ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($rows as $row): ?>
-                <tr>
-                    <?php foreach ($row as $valeur): ?>
-                        <td><?= htmlspecialchars($valeur ?? '') ?></td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        <?php endforeach; ?>
     </table>
-<?php endif; ?>
 </body>
 </html>
