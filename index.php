@@ -1,42 +1,51 @@
 <?php
-session_start();
-if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
-    exit;
+// Connexion à la base
+require 'credentials.php';
+
+try {
+    // On utilise le nom réel de la base : bsd
+    $connexion = new PDO("mysql:host=$host;dbname=bsd;charset=utf8", $user, $pass);
+    $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
 }
-require('credentials.php');
 
-$connexion = new PDO("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $password);
-
-$requete = $connexion->prepare('SELECT * FROM materiel');
+// Sélection de tous les composants
+$requete = $connexion->prepare("SELECT * FROM composants ORDER BY id ASC");
 $requete->execute();
-$materiels = $requete->fetchAll();
+$materiels = $requete->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Gestion du matériel</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
     <h1>Gestion du matériel</h1>
-    <p>Connecté en tant que : <?php print($_SESSION['user']) ?> | <a href="logout.php">Se déconnecter</a></p>
 
-    <table border="1">
+    <table>
         <tr>
             <th>ID</th>
             <th>Nom</th>
             <th>Année</th>
             <th>Détails</th>
             <th>Type</th>
+            <th>Appartient à</th>
         </tr>
         <?php foreach ($materiels as $materiel): ?>
             <tr>
-                <td><?php print($materiel['id']) ?></td>
-                <td><?php print($materiel['nom']) ?></td>
-                <td><?php print($materiel['annee']) ?></td>
-                <td><?php print($materiel['details']) ?></td>
-                <td><?php print($materiel['type']) ?></td>
+                <td><?php echo htmlspecialchars($materiel['id']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['nom']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['annee']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['details']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['type']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['parent']); ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
