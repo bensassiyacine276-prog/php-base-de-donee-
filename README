@@ -1,0 +1,16 @@
+# Projet PHP - Affichage base de donnees
+
+## Installation
+
+1. Cloner le depot
+2. Copier credentials.example.php en credentials.php
+3. Modifier credentials.php avec vos identifiants
+4. Adapter le nom de la table dans index.php
+5. Lancer via PhpStorm ou WAMP/XAMPP
+
+## Structure
+
+- .gitignore : Ignore credentials.php
+- credentials.example.php : Modele de configuration
+- credentials.php : Identifiants locaux non versiones
+- index.php : Page principale avec SELECT et affichage
