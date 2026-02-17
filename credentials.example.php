@@ -1,0 +1,7 @@
+<?php
+// Copier ce fichier en credentials.php et remplir les valeurs
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'nom_de_la_base');
+define('DB_USER', 'utilisateur');
+define('DB_PASS', 'mot_de_passe');
+define('DB_CHARSET', 'utf8mb4');
