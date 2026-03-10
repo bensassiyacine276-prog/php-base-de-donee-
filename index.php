@@ -43,12 +43,11 @@ $materiels = $requete->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo htmlspecialchars($materiel['id']); ?></td>
                 <td><?php echo htmlspecialchars($materiel['nom']); ?></td>
                 <td><?php echo htmlspecialchars($materiel['annee']); ?></td>
-                <td><?php echo htmlspecialchars($materiel['details']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['details']??''); ?></td>
                 <td><?php echo htmlspecialchars($materiel['type']); ?></td>
-                <td><?php echo htmlspecialchars($materiel['parent_id']); ?></td>
+                <td><?php echo htmlspecialchars($materiel['parent_id']??''); ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
 </body>
 </html>
-
