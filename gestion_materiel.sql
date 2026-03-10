@@ -51,4 +51,3 @@ INSERT INTO materiel VALUES
 (33, 'Batterie PC3', 2015, 'usée (≈ 40 min)', 'Batterie', 3),
 (34, 'OS PC3', 2015, 'Windows 10 Pro', 'OS', 3);
 
-
