@@ -4,14 +4,14 @@ require 'credentials.php';
 
 try {
     // On utilise le nom réel de la base : bsd
-    $connexion = new PDO("mysql:host=$host;dbname=bsd;charset=utf8", $user, $pass);
+    $connexion = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
     $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
 // Sélection de tous les composants
-$requete = $connexion->prepare("SELECT * FROM composants ORDER BY id ASC");
+$requete = $connexion->prepare("SELECT * FROM materiel ORDER BY id ASC");
 $requete->execute();
 $materiels = $requete->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -45,9 +45,10 @@ $materiels = $requete->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo htmlspecialchars($materiel['annee']); ?></td>
                 <td><?php echo htmlspecialchars($materiel['details']); ?></td>
                 <td><?php echo htmlspecialchars($materiel['type']); ?></td>
-                <td><?php echo htmlspecialchars($materiel['parent']); ?></td>
+                <td><?php echo htmlspecialchars($materiel[' parent_id']); ?></td>
             </tr>
         <?php endforeach; ?>
     </table>
 </body>
 </html>
+
