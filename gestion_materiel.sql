@@ -1,19 +1,17 @@
-CREATE DATABASE gestion_materiel;
-USE gestion_materiel;
-
+CREATE TABLE type (
+    id_type INT PRIMARY KEY AUTO_INCREMENT,
+    libelle VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE materiel (
-    id INT PRIMARY KEY,
+    id_materiel INT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    annee YEAR,
-    details TEXT,
-    type VARCHAR(50),
-    parent_id INT NULL,
-    
-    CONSTRAINT fk_parent
-        FOREIGN KEY (parent_id)
-        REFERENCES materiel(id)
-        ON DELETE CASCADE
+    annee INT,
+    details VARCHAR(255),
+    id_type INT NOT NULL,
+    id_parent INT,
+    FOREIGN KEY (id_type) REFERENCES type(id_type),
+    FOREIGN KEY (id_parent) REFERENCES materiel(id_materiel)
 );
 
 
